@@ -54,11 +54,11 @@ class LottieButton(
                     .doOnNext { resumeAnimation() }
                     .concatMap {
                         val timer = Timer("PressAndHold", true).timerObservable
-                        Observable.ambArray(touchUpObservable.map { false }, timer.map { true })
+                        Observable.ambArray(touchUpObservable.map { false }.log(Emoji.Up), timer.map { true }.log(Emoji.Clock))
                             .take(1)
                             .observeOn(AndroidSchedulers.mainThread())
                             .doOnNext { pauseAnimation() }
-                            .map { Pair(it, commands) }.log()
+                            .map { Pair(it, commands) }.log(Emoji.Button)
 
                     }
             }
