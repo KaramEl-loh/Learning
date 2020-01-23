@@ -54,6 +54,7 @@ inline fun Completable.log(tag: String? = null): Completable {
 inline fun <reified T> Observable<T>.log(tag: String? = null): Observable<T> {
     val line = tag ?: tag()
     return doOnEach { println("$line Each $it") }
+        .doOnError { println("$line OnError ${Emoji.error}")}
         .doOnSubscribe { println("$line Subscribe ${Emoji.Plane} ") }
         .doOnDispose { println("$line Dispose ${Emoji.disposed}") }
         .doOnNext { println("$line onNext: ${Emoji.next}") }

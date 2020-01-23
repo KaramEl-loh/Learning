@@ -83,9 +83,11 @@ interface Emoji {
         val a_emoji: String
             get() = "🅰️ 🅰️ 🅰️️"
         val b_emoji: String
-            get() = "\uD83C\uDD71️ \uD83C\uDD71️ \uD83C\uDD71️️️"
+            get() = "🅱️ 🅱️ 🅱️ ️️️"
         val c_emoji: String
             get() = "\uD83C\uDDE8 \uD83C\uDDE8 \uD83C\uDDE8️️️"
+        val error:String
+            get() = "🚫 🚫 🚫"
 
         val Miscellaneous: String
             get() = "◀️ ⬇️ ▶️ ⬅️ ↙️ ↘️ ➡️ ⬆️ ↖️ ↗️ ⏬ ⏫ ⤵️ ⤴️ ↩️ ↪️ ↔️ ↕️ ⏪ ⏩ ℹ️" +
