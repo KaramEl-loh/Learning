@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable name="viewModel"
+                  type="com.karam.searchswitchmap.GithubSearchViewModel"/>
+        <variable name="adapter"
+                  type="com.karam.searchswitchmap.GithubRepositoryAdapter"/>
+
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+
+
+        <include layout="@layout/search_bar"
+        bind:viewModel = "@{viewModel}"/>
+
+        <include layout="@layout/main_activity_content"
+        bind:adapter = "@{adapter}"/>
+
+    </LinearLayout>
+</layout>
