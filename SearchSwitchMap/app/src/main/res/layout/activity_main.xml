@@ -7,8 +7,7 @@
 
         <variable name="viewModel"
                   type="com.karam.searchswitchmap.GithubSearchViewModel"/>
-        <variable name="adapter"
-                  type="com.karam.searchswitchmap.GithubRepositoryAdapter"/>
+
 
     </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -21,7 +20,7 @@
         bind:viewModel = "@{viewModel}"/>
 
         <include layout="@layout/main_activity_content"
-        bind:adapter = "@{adapter}"/>
+        bind:viewModel = "@{viewModel}"/>
 
     </LinearLayout>
 </layout>

@@ -21,6 +21,7 @@ class MainActivity : FragmentActivity() {
     private lateinit var recyclerView:RecyclerView
     private lateinit var searchField:EditText
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,9 +33,7 @@ class MainActivity : FragmentActivity() {
 
         val binding:ActivityMainBinding= DataBindingUtil.setContentView(this,R.layout.activity_main)
 
-        val qwe:List<SearchResult> = listOf()
         binding.viewModel = viewModel
-        binding.adapter = GithubRepositoryAdapter(qwe)
 
 
 

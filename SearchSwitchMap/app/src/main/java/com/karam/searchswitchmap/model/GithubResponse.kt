@@ -10,5 +10,5 @@ data class GithubResponse (
 
     @SerializedName("items")
     @Expose
-    var items:List<SearchResult>
+    var items:MutableList<SearchResult>
 )

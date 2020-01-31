@@ -1,6 +1,7 @@
 package com.karam.searchswitchmap
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +11,14 @@ import com.karam.searchswitchmap.databinding.GithubRepoItemBinding
 import com.karam.searchswitchmap.model.SearchResult
 
 
-class GithubRepositoryAdapter(var repositoryDetailsList: List<SearchResult>) :
+class GithubRepositoryAdapter(var repositoryDetailsList: MutableList<SearchResult>) :
     RecyclerView.Adapter<GithubRepositoryAdapter.GithubRepositoryViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GithubRepositoryViewHolder {
 
         val layoutInflater = LayoutInflater.from(parent.context)
-        val githubRepoItemBinding: GithubRepoItemBinding = GithubRepoItemBinding.inflate(layoutInflater,parent,false)
+        val githubRepoItemBinding: GithubRepoItemBinding = GithubRepoItemBinding.inflate(layoutInflater)
 
         return GithubRepositoryViewHolder(githubRepoItemBinding)
 
@@ -29,7 +30,9 @@ class GithubRepositoryAdapter(var repositoryDetailsList: List<SearchResult>) :
 
     override fun onBindViewHolder(holder: GithubRepositoryViewHolder, position: Int) {
 
-        holder.bind(repositoryDetailsList.get(position))
+        Log.d("onBindViewHolder","qqweqwe")
+
+        holder.bind(repositoryDetailsList[position])
 }
 
 
@@ -38,17 +41,24 @@ class GithubRepositoryAdapter(var repositoryDetailsList: List<SearchResult>) :
 
             fun bind(searchResult: SearchResult) {
 
+                Log.d("GithubRepoVH.bind()","qqweqwe")
                 githubRepoItemBinding.repoName.text = searchResult.full_name
+
                 githubRepoItemBinding.executePendingBindings()
             }
 
+    }
 
+    fun addItems (repoList:MutableList<SearchResult>) {
 
-
-
+        repositoryDetailsList.clear()
+        repositoryDetailsList.addAll(repoList)
+        this.notifyDataSetChanged()
 
 
 
     }
+
+
 
 }
