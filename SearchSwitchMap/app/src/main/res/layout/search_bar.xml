@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<layout>
+
+    <data>
+        <variable name="viewModel"
+                  type="com.karam.searchswitchmap.GithubSearchViewModel"/>
+
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:id = "@+id/searchBar"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content">
+
+
+        <EditText android:hint="Enter name here"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/search_field"
+                  android:onTextChanged="@{viewModel::getRepositoryList}"
+                  android:layout_weight="1"/>
+
+
+
+
+
+
+    </LinearLayout>
+
+</layout>

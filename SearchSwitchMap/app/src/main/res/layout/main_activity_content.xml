@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout>
+
+    <data>
+        <variable name="adapter"
+                  type="com.karam.searchswitchmap.GithubRepositoryAdapter"/>
+
+    </data>
+
+    <androidx.recyclerview.widget.RecyclerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/employee_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adapter="@{adapter}"/>
+
+</layout>
+
+
+
+
+
+
+
+
+
