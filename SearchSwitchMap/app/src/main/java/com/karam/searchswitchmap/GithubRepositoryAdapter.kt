@@ -30,35 +30,29 @@ class GithubRepositoryAdapter(var repositoryDetailsList: MutableList<SearchResul
 
     override fun onBindViewHolder(holder: GithubRepositoryViewHolder, position: Int) {
 
-        Log.d("onBindViewHolder","qqweqwe")
 
         holder.bind(repositoryDetailsList[position])
-}
+    }
 
 
-    class GithubRepositoryViewHolder(val githubRepoItemBinding: GithubRepoItemBinding) : RecyclerView.ViewHolder(githubRepoItemBinding.root) {
+    class GithubRepositoryViewHolder(val githubRepoItemBinding: GithubRepoItemBinding) :
+        RecyclerView.ViewHolder(githubRepoItemBinding.root) {
 
+        fun bind(searchResult: SearchResult) {
 
-            fun bind(searchResult: SearchResult) {
-
-                Log.d("GithubRepoVH.bind()","qqweqwe")
-                githubRepoItemBinding.repoName.text = searchResult.full_name
-
-                githubRepoItemBinding.executePendingBindings()
-            }
+            githubRepoItemBinding.repoName.text = searchResult.full_name
+            githubRepoItemBinding.executePendingBindings()
+        }
 
     }
 
-    fun addItems (repoList:MutableList<SearchResult>) {
+    fun addItems(repoList: MutableList<SearchResult>) {
 
         repositoryDetailsList.clear()
         repositoryDetailsList.addAll(repoList)
         this.notifyDataSetChanged()
 
-
-
     }
-
 
 
 }

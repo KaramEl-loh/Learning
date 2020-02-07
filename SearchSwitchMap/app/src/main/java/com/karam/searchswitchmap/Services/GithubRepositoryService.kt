@@ -10,7 +10,7 @@ interface GithubRepositoryService {
 
 
     @GET("repositories")
-    fun getRepositories(@Query("q") repositoryName:CharSequence): Observable<GithubResponse>
+    fun getRepositories(@Query("q") repositoryName: CharSequence): Observable<GithubResponse>
 
 
 }

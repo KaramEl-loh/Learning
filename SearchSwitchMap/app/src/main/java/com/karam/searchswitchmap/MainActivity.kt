@@ -17,9 +17,9 @@ class MainActivity : FragmentActivity() {
 
     private val githubRepositoryProvider = GithubRepositoryProvider()
     private val observablesProvider = ObservablesProvider(githubRepositoryProvider)
-    private lateinit var adapter:GithubRepositoryAdapter
-    private lateinit var recyclerView:RecyclerView
-    private lateinit var searchField:EditText
+    private lateinit var adapter: GithubRepositoryAdapter
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var searchField: EditText
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,43 +31,11 @@ class MainActivity : FragmentActivity() {
 
         val viewModel = ViewModelProviders.of(this).get(GithubSearchViewModel::class.java)
 
-        val binding:ActivityMainBinding= DataBindingUtil.setContentView(this,R.layout.activity_main)
+        val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         binding.viewModel = viewModel
 
-
-
-//
-//        searchField.doOnTextChanged { text, start, count, after ->
-//
-//
-//        }
-//
-//       val asd =  RxTextView.textChanges(searchField).skipInitialValue()
-//           .filter { !it.isNullOrBlank() }
-//           .switchMap { observablesProvider.getSearchObservable(it) }
-//           .subscribeBy(onNext = ::handleSuccess,onError = ::handleError)
     }
-
-//    private fun handleSuccess(response: GithubResponse ){
-//
-//
-//        Log.i("RESPONSE","$response")
-//
-//            adapter = GithubRepositoryAdapter(this,response.items)
-//            recyclerView?.layoutManager = LinearLayoutManager(this)
-//            recyclerView?.adapter = adapter
-//
-//
-//    }
-//
-//    private fun handleError(throwable: Throwable) {
-//        Toast.makeText(this,"An error has occurred",Toast.LENGTH_LONG).show()
-//        Log.d("POTATO","${throwable}")
-//
-//        throwable.printStackTrace()
-//    }
-
 
 }
 

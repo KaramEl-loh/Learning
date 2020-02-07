@@ -20,13 +20,8 @@
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:id="@+id/search_field"
-                  android:onTextChanged="@{viewModel::getRepositoryList}"
+                  android:onTextChanged="@{(text,start,count,after) -> viewModel.getRepositoryList(text)}"
                   android:layout_weight="1"/>
-
-
-
-
-
 
     </LinearLayout>
 

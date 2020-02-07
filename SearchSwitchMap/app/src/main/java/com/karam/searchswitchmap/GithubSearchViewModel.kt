@@ -6,61 +6,44 @@ import com.karam.searchswitchmap.Providers.GithubRepositoryProvider
 import com.karam.searchswitchmap.Providers.ObservablesProvider
 import com.karam.searchswitchmap.model.SearchResult
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
+import javax.inject.Inject
 
 
-class GithubSearchViewModel  : ViewModel() {
+class GithubSearchViewModel : ViewModel()  {
 
 
+    //todo:Dependency injection using dagger
+    private val githubRepositoryProvider = GithubRepositoryProvider()
+    private val observablesProvider = ObservablesProvider(githubRepositoryProvider)
+    private var repoList = mutableListOf<SearchResult>()
+    private val compositeDisposable = CompositeDisposable()
 
-        //todo:Dependency injection using dagger
-        private val githubRepositoryProvider = GithubRepositoryProvider()
-        private val observablesProvider = ObservablesProvider(githubRepositoryProvider)
-        private var repoList = mutableListOf<SearchResult>()
-         var adapter = GithubRepositoryAdapter(repoList)
+    var adapter = GithubRepositoryAdapter(repoList)
 
-        fun getRepositoryList(text:CharSequence,start:Int,count:Int,after:Int) {
+    fun getRepositoryList(text: CharSequence) {
 
-
-                Observable.just(text).filter { !it.isNullOrBlank() }
-                        .switchMap { observablesProvider.getSearchObservable(it) }
-                        .subscribeBy(onNext = ::handleSuccess,onError = ::handleError)
-        }
-
-        val qwe = "asd"
-        private fun handleSuccess(response: GithubResponse){
-
-                adapter.addItems(response.items)
+        compositeDisposable.add(Observable.just(text).filter { !it.isNullOrBlank() }
+            .switchMap { observablesProvider.getSearchObservable(it) }
+            .subscribeBy(onNext = ::handleSuccess, onError = ::handleError))
+    }
 
 
-                //println(response.items)
+    private fun handleSuccess(response: GithubResponse) {
 
-//                Log.i("RESPONSE","$response")
-//
+        adapter.addItems(response.items)
+    }
 
-//                adapter = GithubRepositoryAdapter(this,response.items)
-//                recyclerView?.layoutManager = LinearLayoutManager(this)
-//                recyclerView?.adapter = adapter
+    private fun handleError(throwable: Throwable) {
 
+        throwable.printStackTrace()
+    }
 
-        }
-
-        private fun handleError(throwable: Throwable) {
-
-                throwable.printStackTrace()
-//                Toast.makeText(this,"An error has occurred", Toast.LENGTH_LONG).show()
-//                Log.d("POTATO","${throwable}")
-//
-//                throwable.printStackTrace()
-//        }
-
-
-        }
-
-
-
-
-
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
+    }
 
 
 }

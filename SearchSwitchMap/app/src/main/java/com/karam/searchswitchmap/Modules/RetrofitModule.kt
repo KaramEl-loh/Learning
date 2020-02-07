@@ -11,25 +11,22 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RetrofitModule {
 
 
-    fun getRetrofitClient():Retrofit {
+    fun getRetrofitClient(): Retrofit {
 
         val httpLoggingInterceptor = HttpLoggingInterceptor()
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS)
 
-        //val client =  OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).build()
+        val client = OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor).build()
 
 
 
         return Retrofit.Builder().baseUrl(BASE_URL)
-          //  .client(client)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
 
     }
-
-
-
 
 
 }
