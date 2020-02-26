@@ -9,6 +9,6 @@ data class SearchResult(
 
     @SerializedName("full_name")
     @Expose
-    var full_name:String
+    var full_name: String
 
 )

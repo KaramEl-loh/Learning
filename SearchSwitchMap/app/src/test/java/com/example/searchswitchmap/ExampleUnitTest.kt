@@ -1,4 +1,4 @@
-package com.karam.searchswitchmap
+package com.example.searchswitchmap
 
 import org.junit.Test
 
