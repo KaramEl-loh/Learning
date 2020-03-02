@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
                 observablesProvider.getSearchObservableOffline(queryString)
                     .observeOn(AndroidSchedulers.mainThread())
                     .log(Emoji.BaseBall)
-            }.doOnError { banner.showBanner() }
+            }
     }
 
     override fun onResume() {
@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleError(throwable: Throwable) {
         throwable.printStackTrace()
+        banner.showBanner()
     }
 
     override fun onDestroy() {
