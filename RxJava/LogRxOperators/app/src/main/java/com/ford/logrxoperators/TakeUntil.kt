@@ -8,6 +8,10 @@ import java.util.concurrent.TimeUnit
 
 Examples of the takeUntil operator. For more information, go to https://rxmarbles.com/#takeUntil
 
+
+If you have any other interesting examples/behaviour of takeUntil, feel free to include them here so that we can all learn :)
+
+
  */
 
 
