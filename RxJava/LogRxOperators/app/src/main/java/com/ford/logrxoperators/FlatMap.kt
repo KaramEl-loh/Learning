@@ -55,8 +55,8 @@ event, either an onComplete or an onError).
 fun parentObservableCompletesBeforeChildObservableIsDoneEmitting():Observable<Long> {
 
 
-    val obsA = Observable.interval(10,TimeUnit.SECONDS).take(2).log(Emoji.a_emoji)
-    val obsB = Observable.interval(5,TimeUnit.SECONDS).take(5).log(Emoji.b_emoji)
+    val obsA = Observable.interval(10,TimeUnit.SECONDS).take(2).log(Emoji.BaseBall)
+    val obsB = Observable.interval(5,TimeUnit.SECONDS).take(5).log(Emoji.Building)
 
     return obsA.flatMap { obsB }
 
@@ -91,11 +91,11 @@ come , and we may have more than one subscription at a time.
 
  */
 
-fun parentObservableCompletesBeforeChildObservableEmits():Observable<Long> {
+fun childObservableCompletesBeforeParentObservableisDoneEmitting():Observable<Long> {
 
 
-    val obsA = Observable.interval(5,TimeUnit.SECONDS).take(4).log(Emoji.a_emoji)
-    val obsB = Observable.interval(2,TimeUnit.SECONDS).take(3).log(Emoji.b_emoji)
+    val obsA = Observable.interval(5,TimeUnit.SECONDS).take(4).log(Emoji.BaseBall)
+    val obsB = Observable.interval(2,TimeUnit.SECONDS).take(3).log(Emoji.Building)
 
     return obsA.flatMap { obsB }
 
@@ -130,10 +130,22 @@ subscriptions made to the child that did not complete
 fun childObservableErrorsBeforeParentObservableStopsEmitting():Observable<Long> {
 
 
-    val obsA = Observable.interval(5,TimeUnit.SECONDS).take(4).log(Emoji.a_emoji)
-    val obsB = Observable.interval(2,TimeUnit.SECONDS).take(6)
+    val obsA = Observable.interval(5,TimeUnit.SECONDS).take(2).log(Emoji.BaseBall)
+    val obsB = Observable.interval(2,TimeUnit.SECONDS).take(4)
         .concatWith(Observable.error(Throwable()))
-        .log(Emoji.b_emoji)
+        .log(Emoji.Building)
+
+    return obsA.flatMap { obsB }
+
+}
+
+fun parentObservableErrorsBeforeChildObservableStopsEmitting():Observable<Long> {
+
+
+    val obsA = Observable.interval(5,TimeUnit.SECONDS).take(2)
+        .concatWith(Observable.error(Throwable())).log(Emoji.BaseBall)
+    val obsB = Observable.interval(2,TimeUnit.SECONDS).take(4)
+        .log(Emoji.Building)
 
     return obsA.flatMap { obsB }
 
@@ -165,7 +177,7 @@ way flatMaps are nested are crucial in order to handle errors effectively
 fun childObservableErrorBeforeParentAndGrandParent():Observable<Long> {
 
 
-    val obsA = Observable.interval(5,TimeUnit.SECONDS).take(5).log(Emoji.a_emoji)
+    val obsA = Observable.interval(5,TimeUnit.SECONDS).take(5).log(Emoji.BaseBall)
     val obsB = Observable.interval(3,TimeUnit.SECONDS).take(4).log(Emoji.b_emoji)
 
     val obsC = Observable.interval(1,TimeUnit.SECONDS).take(1).concatWith(Observable.error(Throwable()))
