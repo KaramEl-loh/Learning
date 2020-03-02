@@ -1,12 +1,12 @@
 package com.example.searchswitchmap
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.karam.searchswitchmap.GithubRepositoryAdapter
 import com.example.searchswitchmap.Providers.GithubRepositoryProvider
+import com.karam.searchswitchmap.GithubRepositoryAdapter
 import com.karam.searchswitchmap.Providers.ObservablesProvider
 import com.karam.searchswitchmap.model.GithubResponse
 import com.karam.searchswitchmap.model.SearchResult
@@ -16,6 +16,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var repoList: MutableList<SearchResult>
     private lateinit var searchField: EditText
     private lateinit var searchFieldObservable: Observable<GithubResponse>
+    private lateinit var banner: Banner
 
     private val compositeDisposable = CompositeDisposable()
     private val githubRepositoryProvider = GithubRepositoryProvider()
@@ -35,12 +37,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         repoList = mutableListOf()
         searchField = findViewById(R.id.search_bar)
+        banner = Banner(this, banner_container)
 
         searchFieldObservable = searchField.editTextObservable
             .filter { !it.isNullOrBlank() }
-            .flatMap { observablesProvider.getSearchObservableOffline(it).log(Emoji.BaseBall,it.toString()) }
-            .observeOn(AndroidSchedulers.mainThread())
-
+            .switchMap { queryString ->
+                observablesProvider.getSearchObservableOffline(queryString)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .log(Emoji.BaseBall)
+            }.doOnError { banner.showBanner() }
     }
 
     override fun onResume() {

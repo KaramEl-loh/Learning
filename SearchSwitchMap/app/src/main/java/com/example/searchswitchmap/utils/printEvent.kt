@@ -60,13 +60,14 @@ inline fun Completable.log(tag: String? = null): Completable {
             .doOnDispose { Log.d(line, "Dispose") }
 }
 
-inline fun <reified T> Observable<T>.log(tag: String? = null,queryString:String): Observable<T> {
+inline fun <reified T> Observable<T>.log(tag: String? = null): Observable<T> {
     val line = tag ?: tag()
-    return doOnEach { Log.d(line, "Each $it") }
-            .doOnSubscribe { Log.d(line, "Subscribe ${Emoji.Plane}  Query string = $queryString" ) }
-            .doOnDispose { Log.d(line, "Dispose ${Emoji.disposed} $queryString") }
+    return  doOnEach { Log.d(line, "Each $it") }
+            .doOnSubscribe { Log.d(line, "Subscribe ${Emoji.Plane}"   ) }
+            .doOnDispose { Log.d(line, "Dispose ${Emoji.disposed} ") }
             .doOnNext { Log.d(line, "onNext: ${Emoji.next}") }
             .doOnComplete { Log.d(line, "onComplete ${Emoji.completed}") }
+            .doOnError { Log.d(line, "onError ${Emoji.Boot}")  }
 }
 
 inline fun <reified T> Flowable<T>.log(tag: String? = null): Flowable<T> {
