@@ -59,7 +59,7 @@ class ObservablesProvider(private var githubRepositoryProvider: GithubRepository
                         SearchResult(full_name = "IRkernel/IRkernel")
                     )
                 )
-                Observable.just(response).delay(5,TimeUnit.SECONDS)
+                Observable.just(response)
             }
             "rx" -> {
 
@@ -266,8 +266,10 @@ class ObservablesProvider(private var githubRepositoryProvider: GithubRepository
 
 
             else -> {
-                Observable.just(GithubResponse(items = mutableListOf(SearchResult("invalid String"))))
+//                Observable.just(GithubResponse(items = mutableListOf(SearchResult("invalid String"))))
+                Observable.error(Throwable())
             }
+
         }
 
 

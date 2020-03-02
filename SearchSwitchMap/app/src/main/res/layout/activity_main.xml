@@ -7,13 +7,25 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-    <EditText app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintTop_toTopOf="parent"
-              android:id="@+id/search_bar"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"/>
+    <LinearLayout android:id="@+id/banner_container"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  android:orientation="horizontal"
+                  android:layout_width="0dp"
+                  android:layout_height="0dp"
+                  android:visibility="visible">
+
+    </LinearLayout>
+
+    <EditText
+            android:id="@+id/search_bar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/banner_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
+
             app:layout_constraintTop_toBottomOf="@id/search_bar"
             app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/githubrepo_recyclerview"
