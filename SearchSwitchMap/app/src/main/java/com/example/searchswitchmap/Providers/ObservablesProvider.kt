@@ -9,13 +9,12 @@ import java.util.concurrent.TimeUnit
 class ObservablesProvider(private var githubRepositoryProvider: GithubRepositoryProvider) {
 
 
-    //TODO: Add delay to network observable
     fun getSearchObservable(repoName: CharSequence): Observable<GithubResponse> {
 
 
-        if(repoName.toString() == "r") {
+        if(repoName.toString() == "rxq") {
 
-            return githubRepositoryProvider.getRepositories(repoName).delay(10,TimeUnit.SECONDS)
+            return githubRepositoryProvider.getRepositories(repoName).concatWith(Observable.error(Throwable()))
         }
 
             return githubRepositoryProvider.getRepositories(repoName)
