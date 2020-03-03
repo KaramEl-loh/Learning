@@ -28,19 +28,19 @@ fun main() {
     //flatMap - use one example at a time for now
 
 
-
-
     try {
+
+
+        demoUntilComplete(
+            childObservableCompletesBeforeParentObservableisDoneEmitting()
+            , "flatMap: Child Observable Completes Before Parent Observable Is Done Emitting "
+        )
 
                 demoUntilComplete(
             parentObservableCompletesBeforeChildObservableIsDoneEmitting()
             , "flatMap: Parent Observable Completes Before Child Observable Is Done Emitting "
         )
 
-        demoUntilComplete(
-            childObservableCompletesBeforeParentObservableisDoneEmitting()
-            , "flatMap: Child Observable Completes Before Parent Observable Is Done Emitting "
-        )
 
         //Every example underneath this comment must be run on its own, since they halt program execution after throwing an error
 
@@ -68,8 +68,7 @@ fun main() {
 //            childObservableErrorBeforeParentAndGrandParentDifferentOrderOfFlatMap()
 //            , "flatMap: Child Observable Error Before Parent And GrandParent Different Order Of FlatMap "
 //        )
-    } catch (throwable:Throwable) {
-
+    } catch (throwable: Throwable) {
 
 
     }

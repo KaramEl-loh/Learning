@@ -5,6 +5,8 @@ import java.util.concurrent.TimeUnit
 
 
 
+//TODO: FIX DOCUMENTATION
+
 /*
 
 For information on how flatMap works, check out http://reactivex.io/documentation/operators/flatmap.html
@@ -55,8 +57,8 @@ event, either an onComplete or an onError).
 fun parentObservableCompletesBeforeChildObservableIsDoneEmitting():Observable<Long> {
 
 
-    val obsA = Observable.interval(10,TimeUnit.SECONDS).take(2).log(Emoji.BaseBall)
-    val obsB = Observable.interval(5,TimeUnit.SECONDS).take(5).log(Emoji.Building)
+    val obsA = Observable.interval(1000,TimeUnit.MILLISECONDS).take(2).log(Emoji.BaseBall)
+    val obsB = Observable.interval(500,TimeUnit.MILLISECONDS).take(5).log(Emoji.Building)
 
     return obsA.flatMap { obsB }
 
@@ -94,8 +96,8 @@ come , and we may have more than one subscription at a time.
 fun childObservableCompletesBeforeParentObservableisDoneEmitting():Observable<Long> {
 
 
-    val obsA = Observable.interval(5,TimeUnit.SECONDS).take(4).log(Emoji.BaseBall)
-    val obsB = Observable.interval(2,TimeUnit.SECONDS).take(3).log(Emoji.Building)
+    val obsA = Observable.interval(1000,TimeUnit.MILLISECONDS).take(5).log(Emoji.BaseBall)
+    val obsB = Observable.interval(500,TimeUnit.MILLISECONDS).take(2).log(Emoji.Building)
 
     return obsA.flatMap { obsB }
 
@@ -125,13 +127,16 @@ subscriptions made to the child that did not complete
 
 
 
+
+
+
  */
 
 fun childObservableErrorsBeforeParentObservableStopsEmitting():Observable<Long> {
 
 
-    val obsA = Observable.interval(5,TimeUnit.SECONDS).take(2).log(Emoji.BaseBall)
-    val obsB = Observable.interval(2,TimeUnit.SECONDS).take(4)
+    val obsA = Observable.interval(1,TimeUnit.SECONDS).take(4).log(Emoji.BaseBall)
+    val obsB = Observable.interval(500,TimeUnit.MILLISECONDS).take(4)
         .concatWith(Observable.error(Throwable()))
         .log(Emoji.Building)
 
@@ -142,9 +147,9 @@ fun childObservableErrorsBeforeParentObservableStopsEmitting():Observable<Long> 
 fun parentObservableErrorsBeforeChildObservableStopsEmitting():Observable<Long> {
 
 
-    val obsA = Observable.interval(5,TimeUnit.SECONDS).take(2)
+    val obsA = Observable.interval(1,TimeUnit.SECONDS).take(4)
         .concatWith(Observable.error(Throwable())).log(Emoji.BaseBall)
-    val obsB = Observable.interval(2,TimeUnit.SECONDS).take(4)
+    val obsB = Observable.interval(500,TimeUnit.MILLISECONDS).take(5)
         .log(Emoji.Building)
 
     return obsA.flatMap { obsB }
