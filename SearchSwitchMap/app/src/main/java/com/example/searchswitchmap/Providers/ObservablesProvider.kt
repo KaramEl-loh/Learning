@@ -12,7 +12,7 @@ class ObservablesProvider(private var githubRepositoryProvider: GithubRepository
     fun getSearchObservable(repoName: CharSequence): Observable<GithubResponse> {
 
 
-        if(repoName.toString() == "rxq") {
+        if(repoName.toString().length > 3) {
 
             return githubRepositoryProvider.getRepositories(repoName).concatWith(Observable.error(Throwable()))
         }

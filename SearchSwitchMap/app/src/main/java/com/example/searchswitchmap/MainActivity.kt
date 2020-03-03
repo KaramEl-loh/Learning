@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         searchFieldObservable = searchField.editTextObservable
             .filter { !it.isNullOrBlank() }
             .switchMap { queryString ->
-                observablesProvider.getSearchObservableOffline(queryString)
+                observablesProvider.getSearchObservable(queryString)
                     .observeOn(AndroidSchedulers.mainThread())
                     .log(Emoji.BaseBall)
             }
