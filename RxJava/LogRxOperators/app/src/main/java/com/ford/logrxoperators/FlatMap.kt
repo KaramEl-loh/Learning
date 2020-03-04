@@ -58,7 +58,7 @@ fun parentObservableCompletesBeforeChildObservableIsDoneEmitting():Observable<Lo
 
 
     val obsA = Observable.interval(1000,TimeUnit.MILLISECONDS).take(2).log(Emoji.BaseBall)
-    val obsB = Observable.interval(500,TimeUnit.MILLISECONDS).take(5).log(Emoji.Building)
+    val obsB = Observable.interval(500,TimeUnit.MILLISECONDS).take(5).log(Emoji.Victory)
 
     return obsA.flatMap { obsB }
 
@@ -97,7 +97,7 @@ fun childObservableCompletesBeforeParentObservableisDoneEmitting():Observable<Lo
 
 
     val obsA = Observable.interval(1000,TimeUnit.MILLISECONDS).take(5).log(Emoji.BaseBall)
-    val obsB = Observable.interval(500,TimeUnit.MILLISECONDS).take(2).log(Emoji.Building)
+    val obsB = Observable.interval(500,TimeUnit.MILLISECONDS).take(2).log(Emoji.Victory)
 
     return obsA.flatMap { obsB }
 
@@ -132,25 +132,25 @@ subscriptions made to the child that did not complete
 
  */
 
-fun childObservableErrorsBeforeParentObservableStopsEmitting():Observable<Long> {
+fun parentObservableErrorsBeforeChildObservableStopsEmitting():Observable<Long> {
 
 
-    val obsA = Observable.interval(1,TimeUnit.SECONDS).take(4).log(Emoji.BaseBall)
-    val obsB = Observable.interval(500,TimeUnit.MILLISECONDS).take(4)
-        .concatWith(Observable.error(Throwable()))
-        .log(Emoji.Building)
+    val obsA = Observable.interval(1,TimeUnit.SECONDS).take(5)
+        .concatWith(Observable.error(Throwable())).log(Emoji.BaseBall)
+    val obsB = Observable.interval(500,TimeUnit.MILLISECONDS).take(6)
+        .log(Emoji.Victory)
 
     return obsA.flatMap { obsB }
 
 }
 
-fun parentObservableErrorsBeforeChildObservableStopsEmitting():Observable<Long> {
+fun childObservableErrorsBeforeParentObservableStopsEmitting():Observable<Long> {
 
 
-    val obsA = Observable.interval(1,TimeUnit.SECONDS).take(4)
-        .concatWith(Observable.error(Throwable())).log(Emoji.BaseBall)
-    val obsB = Observable.interval(500,TimeUnit.MILLISECONDS).take(5)
-        .log(Emoji.Building)
+    val obsA = Observable.interval(1,TimeUnit.SECONDS).take(5).log(Emoji.BaseBall)
+    val obsB = Observable.interval(500,TimeUnit.MILLISECONDS).take(6)
+        .concatWith(Observable.error(Throwable()))
+        .log(Emoji.Victory)
 
     return obsA.flatMap { obsB }
 

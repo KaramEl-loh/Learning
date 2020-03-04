@@ -31,27 +31,29 @@ fun main() {
     try {
 
 
-        demoUntilComplete(
-            childObservableCompletesBeforeParentObservableisDoneEmitting()
-            , "flatMap: Child Observable Completes Before Parent Observable Is Done Emitting "
-        )
-
-                demoUntilComplete(
-            parentObservableCompletesBeforeChildObservableIsDoneEmitting()
-            , "flatMap: Parent Observable Completes Before Child Observable Is Done Emitting "
-        )
+//        demoUntilComplete(
+//            childObservableCompletesBeforeParentObservableisDoneEmitting()
+//            , "flatMap: Child Observable Completes Before Parent Observable Is Done Emitting "
+//        )
+//
+//                demoUntilComplete(
+//            parentObservableCompletesBeforeChildObservableIsDoneEmitting()
+//            , "flatMap: Parent Observable Completes Before Child Observable Is Done Emitting "
+//        )
 
 
         //Every example underneath this comment must be run on its own, since they halt program execution after throwing an error
 
-        demoUntilComplete(
-            childObservableErrorsBeforeParentObservableStopsEmitting()
-            , "flatMap: Child Observable Errors Before Parent Observable Stops Emitting "
-        )
+
 
         demoUntilComplete(
             parentObservableErrorsBeforeChildObservableStopsEmitting()
             , "flatMap: Parent Observable Errors Before Child Observable Stops Emitting "
+        )
+
+        demoUntilComplete(
+            childObservableErrorsBeforeParentObservableStopsEmitting()
+            , "flatMap: Child Observable Errors Before Parent Observable Stops Emitting "
         )
 
 //                demoUntilComplete(
