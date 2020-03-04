@@ -12,7 +12,7 @@ class ObservablesProvider(private var githubRepositoryProvider: GithubRepository
     fun getSearchObservable(repoName: CharSequence): Observable<GithubResponse> {
 
 
-        if(repoName.toString().length > 3) {
+        if(repoName.toString().length == 3) {
 
             return githubRepositoryProvider.getRepositories(repoName).concatWith(Observable.error(Throwable()))
         }
@@ -135,7 +135,7 @@ class ObservablesProvider(private var githubRepositoryProvider: GithubRepository
                         SearchResult(full_name = "fdecampredon / rx - react")
                     )
                 )
-                Observable.just(response)
+                Observable.error(Throwable())
             }
 
 
@@ -265,8 +265,8 @@ class ObservablesProvider(private var githubRepositoryProvider: GithubRepository
 
 
             else -> {
-//                Observable.just(GithubResponse(items = mutableListOf(SearchResult("invalid String"))))
-                Observable.error(Throwable())
+                Observable.just(GithubResponse(items = mutableListOf(SearchResult("invalid String"))))
+
             }
 
         }
