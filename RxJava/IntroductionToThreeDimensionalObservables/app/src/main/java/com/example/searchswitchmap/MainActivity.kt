@@ -45,15 +45,11 @@ class MainActivity : AppCompatActivity() {
         banner = Banner(this, banner_container)
 
 
-    }
-
-    override fun onResume() {
-        super.onResume()
         recyclerView = findViewById(R.id.githubrepo_recyclerview)
         editTextObservable = searchField.editTextObservable.filter { !it.isNullOrBlank() }
 
 
-         threeDimensionalObservable =
+        threeDimensionalObservable =
             wifiConnectionObservable.doOnNext { isConnected ->
                 handleConnectivityState(isConnected)
             }
@@ -69,6 +65,8 @@ class MainActivity : AppCompatActivity() {
         )
 
     }
+
+
 
     private fun handleSuccess(response: GithubResponse) {
         repoList = response.items
