@@ -9,6 +9,7 @@ import android.net.NetworkRequest
 import android.os.Bundle
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.searchswitchmap.Providers.GithubRepositoryProvider
@@ -28,13 +29,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var repoList: MutableList<SearchResult>
     private lateinit var searchField: EditText
-    private lateinit var threeDimensionalObservable: Observable<GithubResponse>
     private lateinit var editTextObservable: Observable<CharSequence>
 
     private lateinit var banner: Banner
     private val compositeDisposable = CompositeDisposable()
     private val githubRepositoryProvider = GithubRepositoryProvider()
     private val observablesProvider = ObservablesProvider(githubRepositoryProvider)
+    private lateinit var connectivityManager: ConnectivityManager
+    private lateinit var networkRequest: NetworkRequest
+    private lateinit var networkCallback:ConnectivityManager.NetworkCallback
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,26 +49,49 @@ class MainActivity : AppCompatActivity() {
 
 
         recyclerView = findViewById(R.id.githubrepo_recyclerview)
-        editTextObservable = searchField.editTextObservable.filter { !it.isNullOrBlank() }
+
+        connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        networkRequest = NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_WIFI).build()
+
+        networkCallback = object : ConnectivityManager.NetworkCallback() {
 
 
-        threeDimensionalObservable =
-            wifiConnectionObservable.doOnNext { isConnected ->
-                handleConnectivityState(isConnected)
+            override fun onAvailable(network: Network) {
+
+
+                runOnUiThread {
+                    enableEditText()
+                    banner.hideBanner()
+
+                    searchField.doOnTextChanged { text, _, _, _ ->
+
+                        text?.let { queryString ->
+
+                            compositeDisposable.add(  observablesProvider.getSearchObservable(queryString)
+                                .subscribeBy(onNext = ::handleSuccess, onError = ::handleError))
+
+                        }
+
+                    }
+
+                }
             }
-                .switchMap { isConnected ->
-                    if (isConnected)
-                        editTextObservable.switchMap { observablesProvider.getSearchObservable(it) }
-                    else
-                        Observable.empty()
+
+            override fun onLost(network: Network) {
+
+                runOnUiThread {
+                    disableEditText()
+                    banner.showBanner()
                 }
 
-        compositeDisposable.add(
-            threeDimensionalObservable.subscribeBy(onNext = this::handleSuccess, onError = this::handleError)
-        )
+            }
+
+        }
+
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
 
     }
-
 
 
     private fun handleSuccess(response: GithubResponse) {
@@ -83,37 +109,7 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.clear()
-    }
-
-
-    val connectionObservable = Observable.create<Boolean>
-    { emitter ->
-
-        val connectivityManager =
-            this@MainActivity.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-
-        val networkRequest = NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_WIFI).build()
-
-        val networkCallBack = object : ConnectivityManager.NetworkCallback() {
-
-            override fun onAvailable(network: Network) {
-                emitter.onNext(true)
-            }
-
-            override fun onLost(network: Network) {
-                emitter.onNext(false)
-            }
-        }
-        connectivityManager.registerNetworkCallback(networkRequest, networkCallBack)
-
-        emitter.setCancellable { connectivityManager.unregisterNetworkCallback(networkCallBack) }
-
-    }.observeOn(AndroidSchedulers.mainThread())
-
-    val wifiConnectionObservable = connectionObservable.doOnNext { isConnected ->
-        if (!isConnected)
-            banner.showBanner()
+        connectivityManager.unregisterNetworkCallback(networkCallback)
     }
 
 
@@ -133,18 +129,8 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun handleConnectivityState(isConnected: Boolean) {
-
-        if (!isConnected) {
-            banner.showBanner()
-            disableEditText()
-        } else {
-            banner.hideBanner()
-            enableEditText()
-        }
-
-    }
 
 }
+
 
 
