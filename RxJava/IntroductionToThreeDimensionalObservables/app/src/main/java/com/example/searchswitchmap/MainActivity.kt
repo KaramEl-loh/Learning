@@ -8,6 +8,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Bundle
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var repoList: MutableList<SearchResult>
     private lateinit var searchField: EditText
-    private lateinit var threeDimensionalObservable: Observable<GithubResponse>
+    private lateinit var searchResultsObservable: Observable<GithubResponse>
     private lateinit var editTextObservable: Observable<CharSequence>
 
     private lateinit var banner: Banner
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         editTextObservable = searchField.editTextObservable.filter { !it.isNullOrBlank() }
 
 
-        threeDimensionalObservable =
+        searchResultsObservable =
             wifiConnectionObservable.doOnNext { isConnected ->
                 handleConnectivityState(isConnected)
             }
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
         compositeDisposable.add(
-            threeDimensionalObservable.subscribeBy(onNext = this::handleSuccess, onError = this::handleError)
+            searchResultsObservable.subscribeBy(onNext = this::handleSuccess, onError = this::handleError)
         )
 
     }
@@ -77,7 +78,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleError(throwable: Throwable) {
         throwable.printStackTrace()
-        banner.showBanner()
+        Toast.makeText(this,"Number of calls per hour exceeded",Toast.LENGTH_LONG).show()
+        disableEditText()
     }
 
     override fun onDestroy() {
