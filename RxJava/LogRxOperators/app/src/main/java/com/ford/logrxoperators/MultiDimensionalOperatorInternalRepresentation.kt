@@ -6,23 +6,12 @@ import java.util.concurrent.TimeUnit
 
 fun main() {
 
-//    mappingObservableAToObservableBWithoutFlattening()
-//    mappingObservableAToObservableBUsingFlatMap()
+    mappingObservableAToObservableBUsingFlatMap()
 //    mappingObservableAToObservableBUsingMapAndMerge()
 //    mappingObservableAToObservableBUsingConcatMap()
 //    mappingObservableAToObservableBUsingMapAndConcat()
 //    mappingObservableAToObservableBUsingSwitchMap()
 //    mappingObservableAToObservableBUsingMapAndSwitchOnNext()
-
-}
-
-fun mappingObservableAToObservableBWithoutFlattening() {
-
-    val obsA = Observable.interval(1000, TimeUnit.MILLISECONDS).take(2)
-    val obsB = Observable.interval(500, TimeUnit.MILLISECONDS).take(5)
-
-    obsA.map { obsB }.blockingSubscribe { println(it) }
-
 
 }
 
