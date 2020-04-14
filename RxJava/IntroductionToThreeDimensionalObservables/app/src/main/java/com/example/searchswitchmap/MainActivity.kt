@@ -22,6 +22,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.banner.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,9 +52,7 @@ class MainActivity : AppCompatActivity() {
 
 
         searchResultsObservable =
-            wifiConnectionObservable.doOnNext { isConnected ->
-                handleConnectivityState(isConnected)
-            }
+            connectionObservable
                 .switchMap { isConnected ->
                     if (isConnected)
                         editTextObservable.switchMap { observablesProvider.getSearchObservable(it) }
@@ -77,9 +76,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleError(throwable: Throwable) {
+        disableEditText()
+        banner.showBanner()
+        banner_text.setText("Number of calls exceeded")
         throwable.printStackTrace()
         Toast.makeText(this,"Number of calls per hour exceeded",Toast.LENGTH_LONG).show()
-        disableEditText()
+
     }
 
     override fun onDestroy() {
@@ -111,12 +113,12 @@ class MainActivity : AppCompatActivity() {
 
         emitter.setCancellable { connectivityManager.unregisterNetworkCallback(networkCallBack) }
 
-    }.observeOn(AndroidSchedulers.mainThread())
-
-    val wifiConnectionObservable = connectionObservable.doOnNext { isConnected ->
+    }.doOnNext { isConnected ->
+        handleConnectivityState(isConnected)
         if (!isConnected)
             banner.showBanner()
-    }
+    }.observeOn(AndroidSchedulers.mainThread())
+
 
 
     fun enableEditText() {

@@ -6,11 +6,11 @@ import java.util.concurrent.TimeUnit
 
 fun main() {
 
-//    mappingObservableAToObservableBUsingFlatMap()
+    mappingObservableAToObservableBUsingFlatMap()
 //    mappingObservableAToObservableBUsingMapAndMerge()
 //    mappingObservableAToObservableBUsingConcatMap()
 //    mappingObservableAToObservableBUsingMapAndConcat()
-    mappingObservableAToObservableBUsingSwitchMap()
+//    mappingObservableAToObservableBUsingSwitchMap()
 //    mappingObservableAToObservableBUsingMapAndSwitchOnNext()
 
 }
