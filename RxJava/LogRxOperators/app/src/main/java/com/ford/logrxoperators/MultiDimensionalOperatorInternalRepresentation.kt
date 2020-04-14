@@ -6,11 +6,11 @@ import java.util.concurrent.TimeUnit
 
 fun main() {
 
-    mappingObservableAToObservableBUsingFlatMap()
+//    mappingObservableAToObservableBUsingFlatMap()
 //    mappingObservableAToObservableBUsingMapAndMerge()
 //    mappingObservableAToObservableBUsingConcatMap()
 //    mappingObservableAToObservableBUsingMapAndConcat()
-//    mappingObservableAToObservableBUsingSwitchMap()
+    mappingObservableAToObservableBUsingSwitchMap()
 //    mappingObservableAToObservableBUsingMapAndSwitchOnNext()
 
 }
@@ -20,7 +20,7 @@ fun mappingObservableAToObservableBUsingFlatMap() {
     val obsA = Observable.interval(1000, TimeUnit.MILLISECONDS).take(2)
     val obsB = Observable.interval(500, TimeUnit.MILLISECONDS).take(5)
 
-    obsA.flatMap { obsB }.blockingSubscribe { println(it) }
+    obsA.flatMap { obsB }.blockingSubscribe { print("$it\t") }
 
 }
 
@@ -30,7 +30,7 @@ fun mappingObservableAToObservableBUsingMapAndMerge() {
     val obsB = Observable.interval(500, TimeUnit.MILLISECONDS).take(5)
 
 
-    Observable.merge(obsA.map { obsB }).blockingSubscribe { println(it) }
+    Observable.merge(obsA.map { obsB }).blockingSubscribe { print("$it\t") }
 
 }
 
@@ -39,7 +39,7 @@ fun mappingObservableAToObservableBUsingConcatMap() {
     val obsA = Observable.interval(1000, TimeUnit.MILLISECONDS).take(2)
     val obsB = Observable.interval(500, TimeUnit.MILLISECONDS).take(5)
 
-    obsA.concatMap { obsB }.blockingSubscribe { println(it) }
+    obsA.concatMap { obsB }.blockingSubscribe { print("$it\t") }
 
 }
 
@@ -49,7 +49,7 @@ fun mappingObservableAToObservableBUsingMapAndConcat() {
     val obsB = Observable.interval(500, TimeUnit.MILLISECONDS).take(5)
 
 
-    Observable.concat(obsA.map { obsB }).blockingSubscribe { println(it) }
+    Observable.concat(obsA.map { obsB }).blockingSubscribe {print("$it\t") }
 
 }
 
@@ -58,7 +58,7 @@ fun mappingObservableAToObservableBUsingSwitchMap() {
     val obsA = Observable.interval(1000, TimeUnit.MILLISECONDS).take(2)
     val obsB = Observable.interval(500, TimeUnit.MILLISECONDS).take(5)
 
-    obsA.switchMap { obsB }.blockingSubscribe { println(it) }
+    obsA.switchMap { obsB }.blockingSubscribe { print("$it\t") }
 
 }
 
@@ -68,18 +68,9 @@ fun mappingObservableAToObservableBUsingMapAndSwitchOnNext() {
     val obsB = Observable.interval(500, TimeUnit.MILLISECONDS).take(5)
 
 
-    Observable.switchOnNext(obsA.map { obsB }).blockingSubscribe { println(it) }
+    Observable.switchOnNext(obsA.map { obsB }).blockingSubscribe { print("$it\t") }
 
 }
 
-fun qwe(): Observable<Long> {
-
-    val obsA = Observable.interval(1000, TimeUnit.MILLISECONDS).take(2)
-    val obsB = Observable.interval(500, TimeUnit.MILLISECONDS).take(5)
-
-    return obsA.flatMap { obsB }
-
-
-}
 
 
