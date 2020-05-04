@@ -23,6 +23,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.banner.*
+import retrofit2.HttpException
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,21 +53,26 @@ class MainActivity : AppCompatActivity() {
         editTextObservable = searchField.editTextObservable.filter { !it.isNullOrBlank() }
 
 
+
         searchResultsObservable =
-            connectionObservable
+            connectionObservable.doOnNext { isConnected ->
+                handleConnectivityState(isConnected)
+            }
                 .switchMap { isConnected ->
                     if (isConnected)
-                        editTextObservable.switchMap { observablesProvider.getSearchObservable(it) }
+                        editTextObservable.switchMap { observablesProvider.getSearchObservableOffline(it) }
                     else
                         Observable.empty()
                 }
 
         compositeDisposable.add(
-            searchResultsObservable.subscribeBy(onNext = this::handleSuccess, onError = this::handleError)
+            searchResultsObservable.subscribeBy(
+                onNext = this::handleSuccess,
+                onError = this::handleError
+            )
         )
 
     }
-
 
 
     private fun handleSuccess(response: GithubResponse) {
@@ -76,17 +83,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleError(throwable: Throwable) {
-        disableEditText()
-        banner.showBanner()
-        banner_text.setText("Number of calls exceeded")
+
+        if (throwable is HttpException) {
+            disableEditText()
+            banner.showBanner()
+            banner_text.setText("Number of calls exceeded")
+            Toast.makeText(this, "Number of calls per hour exceeded", Toast.LENGTH_LONG).show()
+        }
         throwable.printStackTrace()
-        Toast.makeText(this,"Number of calls per hour exceeded",Toast.LENGTH_LONG).show()
+
 
     }
 
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.clear()
+
     }
 
 
@@ -97,7 +109,8 @@ class MainActivity : AppCompatActivity() {
             this@MainActivity.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
 
-        val networkRequest = NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_WIFI).build()
+        val networkRequest =
+            NetworkRequest.Builder().addTransportType(NetworkCapabilities.TRANSPORT_WIFI).build()
 
         val networkCallBack = object : ConnectivityManager.NetworkCallback() {
 
@@ -113,12 +126,8 @@ class MainActivity : AppCompatActivity() {
 
         emitter.setCancellable { connectivityManager.unregisterNetworkCallback(networkCallBack) }
 
-    }.doOnNext { isConnected ->
-        handleConnectivityState(isConnected)
-        if (!isConnected)
-            banner.showBanner()
-    }.observeOn(AndroidSchedulers.mainThread())
-
+    }
+        .observeOn(AndroidSchedulers.mainThread())
 
 
     fun enableEditText() {

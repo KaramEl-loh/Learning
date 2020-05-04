@@ -22,7 +22,7 @@ class Banner(context: Context, parentView: ViewGroup) {
     }
 
     fun showBanner() {
-        bannerText?.text = "An error has occurred. The search bar is disabled"
+        bannerText?.text = "There is no internet connection. The search bar is disabled"
 
         banner?.visibility = View.VISIBLE
 
